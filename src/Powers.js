@@ -67,10 +67,9 @@ var hideContentAnimation = insertKeyframesRule({
 module.exports = React.createClass({
     propTypes: {
         className: React.PropTypes.string,
-        hidden: React.PropTypes.bool,
         // Close the modal when esc is pressed? Defaults to true.
         keyboard: React.PropTypes.bool,
-        onHide: React.PropTypes.func,
+        onHide: React.PropTypes.func.isRequired,
         backdrop: React.PropTypes.oneOfType([
             React.PropTypes.bool,
             React.PropTypes.string
@@ -93,7 +92,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        if(this.props.hidden) return null;
 
         var modalStyle = appendVendorPrefix({
             position: "fixed",
@@ -119,8 +117,6 @@ module.exports = React.createClass({
             backgroundColor: "black",
             animationDuration: '0.4s',
             animationFillMode: 'forwards',
-            animationDelay: '0.25s',
-
             animationName: this.state.hidden? hideBackdropAnimation: showBackdropAnimation,
             animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
@@ -149,8 +145,9 @@ module.exports = React.createClass({
         </div>;
     },
 
-    onHide: function(){
+    hide: function(){
         var self = this;
+
         this.setState({
             hidden: true
         });
@@ -164,7 +161,7 @@ module.exports = React.createClass({
         if (this.props.keyboard &&
                 (event.key === "Escape" ||
                  event.keyCode === 27)) {
-            this.onHide();
+            this.hide();
         }
     },
 
