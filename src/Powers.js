@@ -2,6 +2,8 @@ var React = require('react');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 
+var animationDuration = 400;
+
 var showModalAnimation = insertKeyframesRule({
     '0%': {
         opacity: 0,
@@ -69,7 +71,9 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
         // Close the modal when esc is pressed? Defaults to true.
         keyboard: React.PropTypes.bool,
-        onHide: React.PropTypes.func.isRequired,
+        hidden: React.PropTypes.bool,
+        onShow: React.PropTypes.func,
+        onHide: React.PropTypes.func,
         backdrop: React.PropTypes.oneOfType([
             React.PropTypes.bool,
             React.PropTypes.string
@@ -79,6 +83,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             className: "",
+            onShow: function(){},
             onHide: function(){},
             keyboard: true,
             backdrop: true
@@ -87,11 +92,32 @@ module.exports = React.createClass({
 
     getInitialState: function(){
         return {
-            hidden: false
+            hidden: false,
+            remove: false
         }
     },
 
+    hasHidden: function(){
+        return this.props.hidden || this.state.hidden;
+    },
+
+    componentWillReceiveProps: function(props){
+
+        this.setState({
+            hidden: props.hidden
+        })
+    },
+
     render: function() {
+
+        var hidden = this.hasHidden();
+
+        var self = this;
+        setTimeout(function(){
+            var node = self.getDOMNode();
+            React.unmountComponentAtNode(node);
+            // node.parentNode.removeChild(node);
+        }, 400)
 
         var modalStyle = appendVendorPrefix({
             position: "fixed",
@@ -103,7 +129,7 @@ module.exports = React.createClass({
             zIndex: 1050,
             animationDuration: '0.4s',
             animationFillMode: 'forwards',
-            animationName: this.state.hidden? hideModalAnimation: showModalAnimation,
+            animationName: hidden? hideModalAnimation: showModalAnimation,
             animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
 
@@ -117,7 +143,7 @@ module.exports = React.createClass({
             backgroundColor: "black",
             animationDuration: '0.4s',
             animationFillMode: 'forwards',
-            animationName: this.state.hidden? hideBackdropAnimation: showBackdropAnimation,
+            animationName: hidden? hideBackdropAnimation: showBackdropAnimation,
             animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
 
@@ -145,19 +171,37 @@ module.exports = React.createClass({
         </div>;
     },
 
-    hide: function(){
+    show: function(){
+        if(!this.hasHidden()) return;
+
+        this.setState({
+            hidden: false
+        });
+
         var self = this;
+        // after animation end
+        setTimeout(function(){
+            self.props.onShow();
+        }, animationDuration);
+    },
+
+    hide: function(){
+
+        if(this.hasHidden()) return;
 
         this.setState({
             hidden: true
         });
+
+        var self = this;
         // after animation end
         setTimeout(function(){
             self.props.onHide();
-        }, 400)
+        }, animationDuration);
     },
 
     listenKeyboard: function(event) {
+
         if (this.props.keyboard &&
                 (event.key === "Escape" ||
                  event.keyCode === 27)) {
@@ -166,6 +210,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+
         window.addEventListener("keydown", this.listenKeyboard, true);
     },
 

@@ -14,28 +14,24 @@ var Powers = require('powers');
 var Example = React.createClass({
     getInitialState: function(){
         return {
-            dialog: false
+            hiddenDialog: true
         }
     },
-    onClick: function(){
+    showDialog: function(){
+
         this.setState({
-            dialog: true
+            hiddenDialog: false
         })
     },
-    onHide: function(){
+    hideDialog: function(){
         this.setState({
-            dialog: false
+            hiddenDialog: true
         })
+    },
+    onDialogHide: function(){
+        // balabala
     },
     render: function() {
-
-        var dialog = null;
-        if(this.state.dialog){
-            dialog = <Powers onHide={this.onHide}>
-                <h1>I am a dialog</h1>
-                <button>Close</button>
-            </Powers>
-        }
 
         return (
             <div>
@@ -43,8 +39,11 @@ var Example = React.createClass({
                     width: 100,
                     height: 40,
                     background: 'white'
-                }} onClick={this.onClick}>Open A Dialog</button>
-                {dialog}
+                }} onClick={this.showDialog}>Open A Dialog</button>
+                <Powers hidden={this.state.hiddenDialog} onHide={this.onDialogHide}>
+                    <h1>I am a dialog</h1>
+                    <button onClick={this.hideDialog}>Close Me</button>
+                </Powers>
             </div>
         );
     }
