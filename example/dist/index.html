@@ -12,37 +12,37 @@
 var React = require('react');
 var Powers = require('powers');
 var Example = React.createClass({
-    getInitialState: function(){
-        return {
-            hiddenDialog: true
-        }
-    },
     showDialog: function(){
-
-        this.setState({
-            hiddenDialog: false
-        })
+        this.refs.dialog.show();
     },
     hideDialog: function(){
-        this.setState({
-            hiddenDialog: true
-        })
-    },
-    onDialogHide: function(){
-        // balabala
+        this.refs.dialog.hide();
     },
     render: function() {
+        var btnStyle = {
+            margin: '1em auto',
+            padding: '1em 2em',
+            outline: 'none',
+            fontSize: 16,
+            fontWeight: '600',
+            background: '#C94E50',
+            color: '#FFFFFF',
+            border: 'none'
+        };
+
+        var containerStyle = {
+            textAlign: 'center'
+        };
 
         return (
-            <div>
-                <button style={{
-                    width: 100,
-                    height: 40,
-                    background: 'white'
-                }} onClick={this.showDialog}>Open A Dialog</button>
-                <Powers hidden={this.state.hiddenDialog} onHide={this.onDialogHide}>
-                    <h1>I am a dialog</h1>
-                    <button onClick={this.hideDialog}>Close Me</button>
+            <div style={containerStyle}>
+                <button style={btnStyle} onClick={this.showDialog}>Open Dialog</button>
+                <Powers ref="dialog">
+
+                    <div style={containerStyle}>
+                        <h2 style={{color: '#C94E50', fontWeight: 500}}>I am a dialog</h2>
+                        <button style={btnStyle} onClick={this.hideDialog}>Close </button>
+                    </div>
                 </Powers>
             </div>
         );

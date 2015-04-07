@@ -92,32 +92,18 @@ module.exports = React.createClass({
 
     getInitialState: function(){
         return {
-            hidden: false,
-            remove: false
+            hidden: true
         }
     },
 
     hasHidden: function(){
-        return this.props.hidden || this.state.hidden;
-    },
-
-    componentWillReceiveProps: function(props){
-
-        this.setState({
-            hidden: props.hidden
-        })
+        return this.state.hidden;
     },
 
     render: function() {
 
         var hidden = this.hasHidden();
-
-        var self = this;
-        setTimeout(function(){
-            var node = self.getDOMNode();
-            React.unmountComponentAtNode(node);
-            // node.parentNode.removeChild(node);
-        }, 400)
+        if(hidden) return null;
 
         var modalStyle = appendVendorPrefix({
             position: "fixed",
@@ -156,14 +142,14 @@ module.exports = React.createClass({
         });
 
         var modal = (
-            <div style={modalStyle} tabIndex="-1" className={this.props.className}>
-                <div style={contentStyle}>
+            <div ref="modal" style={modalStyle} tabIndex="-1" className={this.props.className}>
+                <div ref="content" style={contentStyle}>
                     {this.props.children}
                 </div>
             </div>
         );
 
-        var backdrop = <div style={backdropStyle} />;
+        var backdrop = <div ref="backdrop" onClick={this.hide} style={backdropStyle} />;
 
         return <div>
             {modal}
@@ -198,6 +184,13 @@ module.exports = React.createClass({
         setTimeout(function(){
             self.props.onHide();
         }, animationDuration);
+    },
+
+    toggle: function(){
+        if(this.hasHidden())
+            this.show();
+        else
+            this.hide();
     },
 
     listenKeyboard: function(event) {
