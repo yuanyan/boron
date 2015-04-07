@@ -31,9 +31,19 @@ npm install powers --save
 ```
 var Dialog = require('powers');
 var Example = React.createClass({
+    showDialog: function(){
+        this.refs.dialog.show();
+    },
+    hideDialog: function(){
+        this.refs.dialog.hide();
+    },
     render: function() {
         return (
-            <Dialog/>
+            <button onClick={this.showDialog}>Open</button>
+            <Dialog ref="dialog">
+                <h2>I'm a dialog</h2>
+                <button onClick={this.hideDialog}>Close</button>
+            </Dialog>
         );
     }
 });
