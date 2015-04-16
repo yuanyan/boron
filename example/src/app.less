@@ -184,3 +184,31 @@ footer a:focus {
     opacity: 0.8;
   }
 }
+
+
+
+.demo-enter {
+    opacity: 0.01;
+    height: 0px;
+    padding: 0px 10px !important;
+    transition: opacity 500ms ease-out,
+                padding 500ms ease-out,
+                height 500ms ease-out;
+}
+.demo-enter.demo-enter-active {
+    opacity: 1;
+    height: 16px;
+    padding: 10px !important;
+}
+.demo-leave {
+    opacity: 1;
+    height: 16px;
+    transition: opacity 500ms ease-out,
+                padding 500ms ease-out,
+                height 500ms ease-out;
+}
+.demo-leave.demo-leave-active {
+    opacity: 0;
+    height: 0px;
+    padding: 0px 10px !important;
+}

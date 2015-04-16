@@ -10,7 +10,7 @@
     "url": "https://github.com/yuanyan/powers.git"
   },
   "peerDependencies": {
-    "react": "^0.13.1",
+    "react": ">=0.12.0",
     "reactify": "^0.17.0"
   },
   "devDependencies": {
@@ -48,6 +48,6 @@
     "modal"
   ],
   "dependencies": {
-    "react-kit": "^0.1.0"
+    "react-kit": "^0.1.2"
   }
 }

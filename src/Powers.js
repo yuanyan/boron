@@ -1,77 +1,19 @@
 var React = require('react');
+var transitionEvents = require('react-kit/transitionEvents');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
-var insertKeyframesRule = require('react-kit/insertKeyframesRule');
-
-var animationDuration = 400;
-
-var showModalAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 0,
-        transform: 'translate3d(-50%, -400px, 0)'
-    },
-    '100%': {
-        opacity: 1,
-        transform: 'translate3d(-50%, -50%, 0)'
-    }
-});
-
-var hideModalAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 1,
-        transform: 'translate3d(-50%, -50%, 0)'
-    },
-    '100%': {
-        opacity: 0,
-        transform: 'translate3d(-50%, 100px, 0)'
-    }
-});
-
-var showBackdropAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 0
-    },
-    '100%': {
-        opacity: 0.7
-    }
-});
-
-var hideBackdropAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 0.7
-    },
-    '100%': {
-        opacity: 0
-    }
-});
-
-var showContentAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 0,
-        transform: 'translate3d(0, -100px, 0)'
-    },
-    '100%': {
-        opacity: 1,
-        transform: 'translate3d(0, 0, 0)'
-    }
-});
-
-var hideContentAnimation = insertKeyframesRule({
-    '0%': {
-        opacity: 1,
-        transform: 'translate3d(0, 0, 0)'
-    },
-    '100%': {
-        opacity: 0,
-        transform: 'translate3d(0, 50px, 0)'
-    }
-});
+var animation = require('./animations/bounce');
+var showModalAnimation = animation.showModalAnimation;
+var hideModalAnimation = animation.hideModalAnimation;
+var showBackdropAnimation = animation.showBackdropAnimation;
+var hideBackdropAnimation = animation.hideBackdropAnimation;
+var showContentAnimation = animation.showContentAnimation;
+var hideContentAnimation = animation.hideContentAnimation;
 
 module.exports = React.createClass({
     propTypes: {
         className: React.PropTypes.string,
         // Close the modal when esc is pressed? Defaults to true.
         keyboard: React.PropTypes.bool,
-        hidden: React.PropTypes.bool,
         onShow: React.PropTypes.func,
         onHide: React.PropTypes.func,
         backdrop: React.PropTypes.oneOfType([
@@ -92,6 +34,7 @@ module.exports = React.createClass({
 
     getInitialState: function(){
         return {
+            willHidden: false,
             hidden: true
         }
     },
@@ -100,10 +43,25 @@ module.exports = React.createClass({
         return this.state.hidden;
     },
 
+    componentDidMount: function(){
+        var node = this.refs.modal.getDOMNode();
+        var endListener = function(e) {
+            if (e && e.target !== node) {
+                return;
+            }
+            transitionEvents.removeEndEventListener(node, endListener);
+            this.enter();
+
+        }.bind(this);
+        transitionEvents.addEndEventListener(node, endListener);
+    },
+
     render: function() {
 
         var hidden = this.hasHidden();
         if(hidden) return null;
+
+        var willHidden = this.state.willHidden;
 
         var modalStyle = appendVendorPrefix({
             position: "fixed",
@@ -115,7 +73,7 @@ module.exports = React.createClass({
             zIndex: 1050,
             animationDuration: '0.4s',
             animationFillMode: 'forwards',
-            animationName: hidden? hideModalAnimation: showModalAnimation,
+            animationName: willHidden? hideModalAnimation: showModalAnimation,
             animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
 
@@ -129,7 +87,7 @@ module.exports = React.createClass({
             backgroundColor: "black",
             animationDuration: '0.4s',
             animationFillMode: 'forwards',
-            animationName: hidden? hideBackdropAnimation: showBackdropAnimation,
+            animationName: willHidden? hideBackdropAnimation: showBackdropAnimation,
             animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
 
@@ -141,34 +99,52 @@ module.exports = React.createClass({
 	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
         });
 
-        var modal = (
+        var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
+
+
+        if(willHidden) {
+            var node = this.refs.modal.getDOMNode();
+            var endListener = function(e) {
+                if (e && e.target !== node) {
+                    return;
+                }
+
+                transitionEvents.removeEndEventListener(node, endListener);
+                this.leave();
+
+            }.bind(this);
+            transitionEvents.addEndEventListener(node, endListener);
+        }
+
+        return (<span>
             <div ref="modal" style={modalStyle} tabIndex="-1" className={this.props.className}>
-                <div ref="content" style={contentStyle}>
+                <div style={contentStyle}>
                     {this.props.children}
                 </div>
             </div>
-        );
-
-        var backdrop = <div ref="backdrop" onClick={this.hide} style={backdropStyle} />;
-
-        return <div>
-            {modal}
             {backdrop}
-        </div>;
+         </span>)
+        ;
+    },
+
+    leave: function(){
+        this.setState({
+            hidden: true
+        });
+        this.props.onHide();
+    },
+
+    enter: function(){
+        this.props.onShow();
     },
 
     show: function(){
         if(!this.hasHidden()) return;
 
         this.setState({
+            willHidden: false,
             hidden: false
         });
-
-        var self = this;
-        // after animation end
-        setTimeout(function(){
-            self.props.onShow();
-        }, animationDuration);
     },
 
     hide: function(){
@@ -176,14 +152,8 @@ module.exports = React.createClass({
         if(this.hasHidden()) return;
 
         this.setState({
-            hidden: true
+            willHidden: true
         });
-
-        var self = this;
-        // after animation end
-        setTimeout(function(){
-            self.props.onHide();
-        }, animationDuration);
     },
 
     toggle: function(){
@@ -194,7 +164,6 @@ module.exports = React.createClass({
     },
 
     listenKeyboard: function(event) {
-
         if (this.props.keyboard &&
                 (event.key === "Escape" ||
                  event.keyCode === 27)) {
@@ -203,11 +172,11 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-
         window.addEventListener("keydown", this.listenKeyboard, true);
     },
 
     componentWillUnmount: function() {
         window.removeEventListener("keydown", this.listenKeyboard, true);
-    }
+    },
+
 });
