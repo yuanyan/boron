@@ -1,13 +1,7 @@
 var React = require('react');
 var transitionEvents = require('react-kit/transitionEvents');
-var appendVendorPrefix = require('react-kit/appendVendorPrefix');
-var animation = require('./animations/bounce');
-var showModalAnimation = animation.showModalAnimation;
-var hideModalAnimation = animation.hideModalAnimation;
-var showBackdropAnimation = animation.showBackdropAnimation;
-var hideBackdropAnimation = animation.hideBackdropAnimation;
-var showContentAnimation = animation.showContentAnimation;
-var hideContentAnimation = animation.hideContentAnimation;
+//var animation = require('./animations/bounce');
+var animation = require('./animations/wave');
 
 module.exports = React.createClass({
     propTypes: {
@@ -44,7 +38,8 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function(){
-        var node = this.refs.modal.getDOMNode();
+        var ref = animation.getRef();
+        var node = this.refs[ref].getDOMNode();
         var endListener = function(e) {
             if (e && e.target !== node) {
                 return;
@@ -62,48 +57,15 @@ module.exports = React.createClass({
         if(hidden) return null;
 
         var willHidden = this.state.willHidden;
-
-        var modalStyle = appendVendorPrefix({
-            position: "fixed",
-            width: "500px",
-            transform: "translate3d(-50%, -50%, 0)",
-            top: "50%",
-            left: "50%",
-            backgroundColor: "white",
-            zIndex: 1050,
-            animationDuration: '0.4s',
-            animationFillMode: 'forwards',
-            animationName: willHidden? hideModalAnimation: showModalAnimation,
-            animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
-        });
-
-        var backdropStyle = appendVendorPrefix({
-            position: "fixed",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            zIndex: 1040,
-            backgroundColor: "black",
-            animationDuration: '0.4s',
-            animationFillMode: 'forwards',
-            animationName: willHidden? hideBackdropAnimation: showBackdropAnimation,
-            animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
-        });
-
-        var contentStyle = appendVendorPrefix({
-            animationDuration: '0.4s',
-	        animationFillMode: 'forwards',
-            animationDelay: '0.25s',
-            animationName: showContentAnimation,
-	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
-        });
+        var modalStyle = animation.getModalStyle(willHidden);
+        var backdropStyle = animation.getBackdropStyle(willHidden);
+        var contentStyle = animation.getContentStyle(willHidden);
+        var ref = animation.getRef(willHidden);
 
         var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
-
         if(willHidden) {
-            var node = this.refs.modal.getDOMNode();
+            var node = this.refs[ref].getDOMNode();
             var endListener = function(e) {
                 if (e && e.target !== node) {
                     return;
@@ -117,8 +79,8 @@ module.exports = React.createClass({
         }
 
         return (<span>
-            <div ref="modal" style={modalStyle} tabIndex="-1" className={this.props.className}>
-                <div style={contentStyle}>
+            <div ref="modal" style={modalStyle} className={this.props.className}>
+                <div ref="content" tabIndex="-1" style={contentStyle}>
                     {this.props.children}
                 </div>
             </div>
