@@ -55,10 +55,10 @@ var ComponentPreview = React.createClass({displayName: "ComponentPreview",
             var compiledCode = this.compileCode();
             React.render(eval(compiledCode), mountNode);
         } catch (err) {
-            // debugger
+
             this.setTimeout(function() {
                 React.render(
-                    React.createElement("div", {className: "playgroundError"}, err.toString()),
+                    React.createElement("div", {className: "playgroundError"},  err.stack || err.toString()),
                     mountNode
                 );
             }, 500);

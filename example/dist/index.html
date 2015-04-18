@@ -11,38 +11,54 @@
 <script type="text" id="code1">
 var React = require('react');
 var Powers = require('powers');
+
+var btnStyle = {
+    margin: '1em auto',
+    padding: '1em 2em',
+    outline: 'none',
+    fontSize: 16,
+    fontWeight: '600',
+    background: '#C94E50',
+    color: '#FFFFFF',
+    border: 'none'
+};
+
+var containerStyle = {
+    textAlign: 'center'
+};
+
 var Example = React.createClass({
-    showDialog: function(){
-        this.refs.dialog.show();
+
+    toggleDialog: function(ref){
+
+        return function(){
+            this.refs[ref].toggle();
+        }.bind(this)
     },
-    hideDialog: function(){
-        this.refs.dialog.hide();
+
+    getContent: function(ref){
+        return <div style={containerStyle}>
+        <h2 style={{margin: 0, color: '#C94E50', fontWeight: 500}}>I am  dialog</h2>
+            <button style={btnStyle} onClick={this.toggleDialog(ref)}>Close</button>
+        </div>
+    },
+
+    getTiggerAndModal: function(ref){
+        var Modal = Powers[ref];
+
+        return <div>
+        <button style={btnStyle} onClick={this.toggleDialog(ref)}>Open {ref}</button>
+
+        <Modal ref={ref}>{this.getContent(ref)}</Modal>
+        </div>
     },
     render: function() {
-        var btnStyle = {
-            margin: '1em auto',
-            padding: '1em 2em',
-            outline: 'none',
-            fontSize: 16,
-            fontWeight: '600',
-            background: '#C94E50',
-            color: '#FFFFFF',
-            border: 'none'
-        };
-
-        var containerStyle = {
-            textAlign: 'center'
-        };
-
+        var self = this;
         return (
             <div style={containerStyle}>
-                <button style={btnStyle} onClick={this.showDialog}>Open Dialog</button>
-                <Powers ref="dialog">
-                    <div style={containerStyle}>
-                    <h2 style={{margin: 0, color: '#C94E50', fontWeight: 500}}>I'm a dialog</h2>
-                        <button style={btnStyle} onClick={this.hideDialog}>Close</button>
-                    </div>
-                </Powers>
+                {['DropModal', 'WaveModal'].map(function(name){
+                    return self.getTiggerAndModal(name)
+                })}
             </div>
         );
     }
