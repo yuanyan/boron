@@ -46,7 +46,6 @@ var EXAMPLE_FILES = [
 	'index.html'
 ];
 
-
 /**
  * Bundle helpers
  */
@@ -92,30 +91,22 @@ gulp.task('prepare:examples', function(done) {
 /**
  * Build example files
  */
-
-function buildExampleFiles() {
+gulp.task('build:example:files', ['prepare:examples'], function buildExampleFiles() {
 	return gulp.src(EXAMPLE_FILES.map(function(i) { return EXAMPLE_SRC_PATH + '/' + i }))
 		.pipe(gulp.dest(EXAMPLE_DIST_PATH))
 		.pipe(connect.reload());
-}
-
-gulp.task('dev:build:example:files', buildExampleFiles);
-gulp.task('build:example:files', ['prepare:examples'], buildExampleFiles);
+});
 
 
 /**
  * Build example css from less
  */
-
-function buildExampleCSS() {
+gulp.task('build:example:css', ['prepare:examples'], function buildExampleCSS() {
 	return gulp.src(EXAMPLE_SRC_PATH + '/' + EXAMPLE_LESS)
 		.pipe(less())
 		.pipe(gulp.dest(EXAMPLE_DIST_PATH))
 		.pipe(connect.reload());
-}
-
-gulp.task('dev:build:example:css', buildExampleCSS);
-gulp.task('build:example:css', ['prepare:examples'], buildExampleCSS);
+});
 
 
 /**
@@ -160,37 +151,34 @@ function buildExampleScripts(dev) {
 
 };
 
-gulp.task('dev:build:example:copy', function(){
+
+gulp.task('dev:build:example:scripts', ['prepare:examples'], buildExampleScripts(true));
+gulp.task('build:example:scripts', ['prepare:examples'], buildExampleScripts());
+
+gulp.task('build:example:copy', function(){
     return gulp.src(EXAMPLE_COPY)
         .pipe(gulp.dest(EXAMPLE_DIST_PATH))
         .pipe(connect.reload());
 });
-gulp.task('build:example:copy', ['dev:build:example:copy']);
-
-
-gulp.task('dev:build:example:scripts', buildExampleScripts(true));
-gulp.task('build:example:scripts', ['prepare:examples'], buildExampleScripts());
-
 
 /**
  * Build examples
  */
-
 gulp.task('build:examples', [
 	'build:example:files',
 	'build:example:css',
 	'build:example:scripts',
-    'build:example:copy'
+  'build:example:copy'
 ]);
 
 gulp.task('watch:examples', [
-	'dev:build:example:files',
-	'dev:build:example:css',
+	'build:example:files',
+	'build:example:css',
 	'dev:build:example:scripts',
-	'dev:build:example:copy'
+	'build:example:copy'
 ], function() {
-	gulp.watch(EXAMPLE_FILES.map(function(i) { return EXAMPLE_SRC_PATH + '/' + i }), ['dev:build:example:files']);
-	gulp.watch([EXAMPLE_SRC_PATH + '/' + EXAMPLE_LESS], ['dev:build:example:css']);
+	gulp.watch(EXAMPLE_FILES.map(function(i) { return EXAMPLE_SRC_PATH + '/' + i }), ['build:example:files']);
+	gulp.watch([EXAMPLE_SRC_PATH + '/' + EXAMPLE_LESS], ['build:example:css']);
 });
 
 
@@ -205,7 +193,6 @@ gulp.task('dev:server', function() {
 		livereload: true
 	});
 });
-
 
 /**
  * Development task
@@ -250,9 +237,11 @@ gulp.task('build:dist', ['prepare:dist'], function() {
 });
 
 gulp.task('build', [
-	'build:dist',
-	'build:examples'
-]);
+	'prepare:dist',
+	'prepare:examples'
+], function(){
+	gulp.start('build:dist', 'build:examples')
+});
 
 
 /**
@@ -261,7 +250,7 @@ gulp.task('build', [
 
 function getBumpTask(type) {
 	return function() {
-		return gulp.src(['./package.json', './bower.json'])
+		return gulp.src(['./package.json'])
 			.pipe(bump({ type: type }))
 			.pipe(gulp.dest('./'));
 	};
@@ -292,15 +281,28 @@ gulp.task('publish:tag', function(done) {
 });
 
 
+
 /**
  * npm publish task
  * * (version *must* be bumped first)
  */
+function buildToRoot(){
+	return gulp.src(SRC_PATH + '/*.js')
+		.pipe(react())
+		.pipe(gulp.dest('./'))
+}
 
-gulp.task('publish:npm', function(done) {
+gulp.task('build:npm', buildToRoot);
+
+gulp.task('publish:npm', ['build:npm'], function(done) {
+
 	require('child_process')
 		.spawn('npm', ['publish'], { stdio: 'inherit' })
 		.on('close', done);
+});
+
+gulp.task('release:npm', ['publish:npm'], function(){
+		buildToRoot().pipe(vinyPaths(del))
 });
 
 
@@ -312,4 +314,4 @@ gulp.task('publish:examples', ['build:examples'], function() {
 	return gulp.src(EXAMPLE_DIST_PATH + '/**/*').pipe(deploy());
 });
 
-gulp.task('release', ['publish:tag', 'publish:npm', 'publish:examples']);
+gulp.task('release', ['publish:tag', 'release:npm', 'publish:examples']);
