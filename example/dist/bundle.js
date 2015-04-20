@@ -682,21 +682,22 @@ module.exports = {
             },
         });
 
+
         var sharpStyle = {
             position: 'absolute',
             width: 'calc(100%)',
             height: 'calc(100%)',
             zIndex: '-1'
-        }
+        };
 
         var rectStyle = appendVendorPrefix({
-            animationDuration: '0.8s',
+            animationDuration: willHidden? '0.4s' :'0.8s',
             animationFillMode: 'forwards',
-            animationName: willHidden? '': showSharpAnimation,
+            animationName: willHidden? hideContentAnimation: showSharpAnimation,
             stroke: '#ffffff',
             strokeWidth: '2px',
             strokeDasharray: strokeDashLength
-        })
+        });
 
         return React.createElement("div", {style: sharpStyle}, 
             React.createElement("svg", {
@@ -1181,7 +1182,7 @@ module.exports = function(animation){
 
             return (React.createElement("span", null, 
                 React.createElement("div", {ref: "modal", style: modalStyle, className: this.props.className}, 
-                    animation.getSharp, 
+                    sharp, 
                     React.createElement("div", {ref: "content", tabIndex: "-1", style: contentStyle}, 
                         this.props.children
                     )

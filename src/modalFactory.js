@@ -83,7 +83,7 @@ module.exports = function(animation){
 
             return (<span>
                 <div ref="modal" style={modalStyle} className={this.props.className}>
-                    {animation.getSharp}
+                    {sharp}
                     <div ref="content" tabIndex="-1" style={contentStyle}>
                         {this.props.children}
                     </div>

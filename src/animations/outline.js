@@ -74,21 +74,22 @@ module.exports = {
             },
         });
 
+
         var sharpStyle = {
             position: 'absolute',
             width: 'calc(100%)',
             height: 'calc(100%)',
             zIndex: '-1'
-        }
+        };
 
         var rectStyle = appendVendorPrefix({
-            animationDuration: '0.8s',
+            animationDuration: willHidden? '0.4s' :'0.8s',
             animationFillMode: 'forwards',
-            animationName: willHidden? '': showSharpAnimation,
+            animationName: willHidden? hideContentAnimation: showSharpAnimation,
             stroke: '#ffffff',
             strokeWidth: '2px',
             strokeDasharray: strokeDashLength
-        })
+        });
 
         return <div style = {sharpStyle}>
             <svg
