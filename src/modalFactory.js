@@ -64,7 +64,7 @@ module.exports = function(animation){
             var backdropStyle = animation.getBackdropStyle(willHidden);
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
-
+            var sharp = animation.getSharp && animation.getSharp(willHidden);
             var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
             if(willHidden) {
@@ -83,6 +83,7 @@ module.exports = function(animation){
 
             return (<span>
                 <div ref="modal" style={modalStyle} className={this.props.className}>
+                    {animation.getSharp}
                     <div ref="content" tabIndex="-1" style={contentStyle}>
                         {this.props.children}
                     </div>

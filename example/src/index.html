@@ -56,7 +56,7 @@ var Example = React.createClass({
         var self = this;
         return (
             <div style={containerStyle}>
-                {['DropModal', 'WaveModal'].map(function(name){
+                {['OutlineModal', 'ScaleModal', 'FadeModal', 'FlyModal', 'DropModal', 'WaveModal'].map(function(name){
                     return self.getTiggerAndModal(name)
                 })}
             </div>
