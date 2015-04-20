@@ -50,7 +50,7 @@ h2 {
   padding: 6px 8px;
   font-size: 12px;
   font-weight: bold;
-  color: #CF000F;
+  color: #C94E50;
   display: inline-block;
   cursor: pointer;
 }
@@ -85,8 +85,8 @@ header {
 }
 header:before {
   content: "";
-  background: #CF000F;
-  box-shadow: 0 15px 0 #B80411, 0 30px 0 #A3030E, 0 45px 0 #94010C;
+  background: #C94E50;
+  box-shadow: 0 15px 0 #B64042, 0 30px 0 #A33739, 0 45px 0 #942527;
   -webkit-transform: rotate(-5deg);
   -moz-transform: rotate(-5deg);
   transform: rotate(-5deg);
@@ -107,7 +107,7 @@ header:before {
   position: relative;
   text-align: center;
   width: 230px;
-  background: #CF000F;
+  background: #C94E50;
   color: #fff;
   border: 22px solid #fff;
   text-rendering: optimizeLegibility;
@@ -142,7 +142,7 @@ footer {
 }
 footer a {
   font-weight: 700;
-  color: #CF000F;
+  color: #C94E50;
   text-decoration: none;
 }
 footer a:hover,
