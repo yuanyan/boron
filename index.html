@@ -24,6 +24,7 @@ var btnStyle = {
 };
 
 var containerStyle = {
+    padding: '2em',
     textAlign: 'center'
 };
 
@@ -38,7 +39,7 @@ var Example = React.createClass({
 
     getContent: function(ref){
         return <div style={containerStyle}>
-        <h2 style={{margin: 0, color: '#C94E50', fontWeight: 500}}>I am  dialog</h2>
+        <h2 style={{margin: 0, color: '#C94E50', fontWeight: 400}}><strong>Boron</strong> is amazing</h2>
             <button style={btnStyle} onClick={this.toggleDialog(ref)}>Close</button>
         </div>
     },
