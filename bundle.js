@@ -1247,7 +1247,7 @@ module.exports = function(animation){
 
 }
 
-},{"react":undefined,"react-kit/transitionEvents":6}],"powers":[function(require,module,exports){
+},{"react":undefined,"react-kit/transitionEvents":6}],"boron":[function(require,module,exports){
 module.exports = {
     DropModal: require('./DropModal'),
     WaveModal: require('./WaveModal'),

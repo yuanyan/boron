@@ -113,7 +113,7 @@ header:before {
   text-rendering: optimizeLegibility;
 }
 .logo:before {
-  content: "P";
+  content: "B";
   font-size: 140px;
   position: absolute;
   right: 0;
