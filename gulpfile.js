@@ -86,7 +86,7 @@ function watchBundle(target, name, dest) {
  * Prepare task for examples
  */
 
-gulp.task('prepare:examples', function(done) {
+gulp.task('clean:examples', function(done) {
 	del([EXAMPLE_DIST_PATH], done);
 });
 
@@ -94,7 +94,7 @@ gulp.task('prepare:examples', function(done) {
 /**
  * Build example files
  */
-gulp.task('build:example:files', ['prepare:examples'], function buildExampleFiles() {
+gulp.task('build:example:files', function buildExampleFiles() {
 	return gulp.src(EXAMPLE_FILES.map(function(i) { return EXAMPLE_SRC_PATH + '/' + i }))
 		.pipe(gulp.dest(EXAMPLE_DIST_PATH))
 		.pipe(connect.reload());
@@ -104,7 +104,7 @@ gulp.task('build:example:files', ['prepare:examples'], function buildExampleFile
 /**
  * Build example css from less
  */
-gulp.task('build:example:css', ['prepare:examples'], function buildExampleCSS() {
+gulp.task('build:example:css', function buildExampleCSS() {
 	return gulp.src(EXAMPLE_SRC_PATH + '/' + EXAMPLE_LESS)
 		.pipe(less())
 		.pipe(gulp.dest(EXAMPLE_DIST_PATH))
@@ -155,8 +155,8 @@ function buildExampleScripts(dev) {
 };
 
 
-gulp.task('dev:build:example:scripts', ['prepare:examples'], buildExampleScripts(true));
-gulp.task('build:example:scripts', ['prepare:examples'], buildExampleScripts());
+gulp.task('dev:build:example:scripts', buildExampleScripts(true));
+gulp.task('build:example:scripts', buildExampleScripts());
 
 gulp.task('build:example:copy', function(){
     return gulp.src(EXAMPLE_COPY)
@@ -211,7 +211,7 @@ gulp.task('dev', [
  * Build task
  */
 
-gulp.task('prepare:dist', function(done) {
+gulp.task('clean:dist', function(done) {
 	del([DIST_PATH], done);
 });
 
@@ -240,8 +240,7 @@ gulp.task('build:dist', ['prepare:dist'], function() {
 });
 
 gulp.task('build', [
-	'prepare:dist',
-	'prepare:examples'
+	'clean:dist',
 ], function(){
 	gulp.start('build:dist', 'build:examples')
 });
