@@ -25,7 +25,7 @@ var browserify = require('browserify'),
 var SRC_PATH = 'src';
 var DIST_PATH = 'dist';
 
-var COMPONENT_NAME = 'Powers';
+var COMPONENT_NAME = 'Boron';
 var PACKAGE_FILE =  COMPONENT_NAME + '.js';
 var PACKAGE_NAME = COMPONENT_NAME.toLowerCase();
 

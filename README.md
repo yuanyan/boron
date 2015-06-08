@@ -1,11 +1,11 @@
-Powers
-=======
+Boron
+=====
 
 A collection of dialog animations with React.js.
 
 ## Demo & Examples
 
-Live demo: [yuanyan.github.io/powers](http://yuanyan.github.io/powers/)
+Live demo: [yuanyan.github.io/boron](http://yuanyan.github.io/boron/)
 
 To build the examples locally, run:
 
@@ -18,36 +18,46 @@ Then open [`localhost:9999`](http://localhost:9999) in a browser.
 
 ## Installation
 
-The easiest way to use `powers` is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), etc).
+The easiest way to use `boron` is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), etc).
 
-You can also use the standalone build by including `dist/powers.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
+You can also use the standalone build by including `dist/boron.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
 
 ```
-npm install powers --save
+npm install boron --save
 ```
 
 ## Usage
 
 ```
-var Dialog = require('powers');
+var Modal = require('boron/DropModal');
 var Example = React.createClass({
-    showDialog: function(){
-        this.refs.dialog.show();
+    showModal: function(){
+        this.refs.modal.show();
     },
-    hideDialog: function(){
-        this.refs.dialog.hide();
+    hideModal: function(){
+        this.refs.modal.hide();
     },
     render: function() {
         return (
-            <button onClick={this.showDialog}>Open</button>
-            <Dialog ref="dialog">
+            <button onClick={this.showModal}>Open</button>
+            <Modal ref="modal">
                 <h2>I'm a dialog</h2>
-                <button onClick={this.hideDialog}>Close</button>
-            </Dialog>
+                <button onClick={this.hideModal}>Close</button>
+            </Modal>
         );
     }
 });
 ```
+
+
+## Modals
+
+* DropModal
+* FadeModal
+* FlyModal
+* OutlineModal
+* ScaleModal
+* WaveModal
 
 ## Browser Support
 

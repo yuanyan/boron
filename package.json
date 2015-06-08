@@ -1,13 +1,13 @@
 {
-  "name": "powers",
+  "name": "boron",
   "version": "0.1.0",
   "description": "A collection of dialog animations with React.js",
-  "main": "src/Powers.js",
+  "main": "src/Boron.js",
   "author": "Yuanyan Cao",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yuanyan/powers.git"
+    "url": "https://github.com/yuanyan/boron.git"
   },
   "peerDependencies": {
     "react": ">=0.12.0",
