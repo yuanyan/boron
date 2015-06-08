@@ -1,3 +1,4 @@
+var modalFactory = require('./modalFactory');
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
@@ -199,7 +200,7 @@ var hideContentAnimation = animation.hideContentAnimation;
 var showBackdropAnimation = animation.showBackdropAnimation;
 var hideBackdropAnimation = animation.hideBackdropAnimation;
 
-module.exports = {
+module.exports = modalFactory({
     getRef: function(willHidden) {
         return 'content';
     },
@@ -238,4 +239,4 @@ module.exports = {
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         })
     }
-}
+});

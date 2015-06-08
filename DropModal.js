@@ -1,34 +1,37 @@
-var React = require('react');
+var modalFactory = require('./modalFactory');
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
 var animation = {
     show: {
-        animationDuration: '0.8s',
-        animationTimingFunction: 'cubic-bezier(0.6,0,0.4,1)'
+        animationDuration: '0.4s',
+        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
     },
+
     hide: {
         animationDuration: '0.4s',
-        animationTimingFunction: 'ease-out'
+        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
     },
-    showContentAnimation: insertKeyframesRule({
+
+    showModalAnimation: insertKeyframesRule({
         '0%': {
             opacity: 0,
-        },
-        '40%':{
-            opacity: 0
+            transform: 'translate3d(-50%, -300px, 0)'
         },
         '100%': {
             opacity: 1,
+            transform: 'translate3d(-50%, -50%, 0)'
         }
     }),
 
-    hideContentAnimation: insertKeyframesRule({
+    hideModalAnimation: insertKeyframesRule({
         '0%': {
-            opacity: 1
+            opacity: 1,
+            transform: 'translate3d(-50%, -50%, 0)'
         },
         '100%': {
             opacity: 0,
+            transform: 'translate3d(-50%, 100px, 0)'
         }
     }),
 
@@ -38,7 +41,7 @@ var animation = {
         },
         '100%': {
             opacity: 0.9
-        },
+        }
     }),
 
     hideBackdropAnimation: insertKeyframesRule({
@@ -48,73 +51,57 @@ var animation = {
         '100%': {
             opacity: 0
         }
+    }),
+
+    showContentAnimation: insertKeyframesRule({
+        '0%': {
+            opacity: 0,
+            transform: 'translate3d(0, -20px, 0)'
+        },
+        '100%': {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)'
+        }
+    }),
+
+    hideContentAnimation: insertKeyframesRule({
+        '0%': {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)'
+        },
+        '100%': {
+            opacity: 0,
+            transform: 'translate3d(0, 50px, 0)'
+        }
     })
 };
 
 var showAnimation = animation.show;
 var hideAnimation = animation.hide;
-var showContentAnimation = animation.showContentAnimation;
-var hideContentAnimation = animation.hideContentAnimation;
+var showModalAnimation = animation.showModalAnimation;
+var hideModalAnimation = animation.hideModalAnimation;
 var showBackdropAnimation = animation.showBackdropAnimation;
 var hideBackdropAnimation = animation.hideBackdropAnimation;
+var showContentAnimation = animation.showContentAnimation;
+var hideContentAnimation = animation.hideContentAnimation;
 
-module.exports = {
+module.exports = modalFactory({
     getRef: function(willHidden) {
-        return 'content';
-    },
-    getSharp: function(willHidden) {
-        var strokeDashLength = 1680;
-
-        var showSharpAnimation = insertKeyframesRule({
-            '0%': {
-                'stroke-dashoffset': strokeDashLength
-            },
-            '100%': {
-                'stroke-dashoffset': 0
-            },
-        });
-
-
-        var sharpStyle = {
-            position: 'absolute',
-            width: 'calc(100%)',
-            height: 'calc(100%)',
-            zIndex: '-1'
-        };
-
-        var rectStyle = appendVendorPrefix({
-            animationDuration: willHidden? '0.4s' :'0.8s',
-            animationFillMode: 'forwards',
-            animationName: willHidden? hideContentAnimation: showSharpAnimation,
-            stroke: '#ffffff',
-            strokeWidth: '2px',
-            strokeDasharray: strokeDashLength
-        });
-
-        return <div style = {sharpStyle}>
-            <svg
-                xmlns = "http://www.w3.org/2000/svg"
-                width = "100%"
-                height = "100%"
-                viewBox = "0 0 496 136"
-                preserveAspectRatio = "none">
-                <rect style={rectStyle}
-                    x = "2"
-                    y = "2"
-                    fill = "none"
-                    width = "492"
-                    height = "132" />
-            </svg>
-        </div>
+        return 'modal';
     },
     getModalStyle: function(willHidden) {
         return appendVendorPrefix({
-            zIndex: 1050,
             position: "fixed",
             width: "500px",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
-            left: "50%"
+            left: "50%",
+            backgroundColor: "white",
+            zIndex: 1050,
+            animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
+            animationFillMode: 'forwards',
+            animationName: willHidden ? hideModalAnimation : showModalAnimation,
+            animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         })
     },
     getBackdropStyle: function(willHidden) {
@@ -126,8 +113,8 @@ module.exports = {
             left: 0,
             zIndex: 1040,
             backgroundColor: "#373A47",
+            animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
             animationFillMode: 'forwards',
-            animationDuration: '0.4s',
             animationName: willHidden ? hideBackdropAnimation : showBackdropAnimation,
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         });
@@ -135,11 +122,11 @@ module.exports = {
     getContentStyle: function(willHidden) {
         return appendVendorPrefix({
             margin: 0,
-            backgroundColor: "white",
             animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
             animationFillMode: 'forwards',
-            animationName: willHidden ? hideContentAnimation : showContentAnimation,
+            animationDelay: '0.25s',
+            animationName: showContentAnimation,
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         })
     }
-}
+});

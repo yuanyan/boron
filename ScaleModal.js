@@ -1,45 +1,35 @@
+var modalFactory = require('./modalFactory');
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
 var animation = {
     show: {
-        animationDuration: '0.5s',
-        animationTimingFunction: 'ease-out'
+        animationDuration: '0.4s',
+        animationTimingFunction: 'cubic-bezier(0.6,0,0.4,1)'
     },
     hide: {
-        animationDuration: '0.5s',
+        animationDuration: '0.4s',
         animationTimingFunction: 'ease-out'
     },
     showContentAnimation: insertKeyframesRule({
-
         '0%': {
             opacity: 0,
-            transform: 'translate3d(calc(-100vw - 50%), 0, 0)'
-        },
-        '50%': {
-            opacity: 1,
-            transform: 'translate3d(100px, 0, 0)'
+            transform: 'scale3d(0, 0, 1)'
         },
         '100%': {
             opacity: 1,
-            transform: 'translate3d(0, 0, 0)'
+            transform: 'scale3d(1, 1, 1)'
         }
     }),
 
     hideContentAnimation: insertKeyframesRule({
-
         '0%': {
-            opacity: 1,
-            transform: 'translate3d(0, 0, 0)'
-        },
-        '50%': {
-            opacity: 1,
-            transform: 'translate3d(-100px, 0, 0) scale3d(1.1, 1.1, 1)'
+            opacity: 1
         },
         '100%': {
             opacity: 0,
-            transform: 'translate3d(calc(100vw + 50%), 0, 0)'
-        },
+            transform: 'scale3d(0.5, 0.5, 1)'
+        }
     }),
 
     showBackdropAnimation: insertKeyframesRule({
@@ -55,9 +45,6 @@ var animation = {
         '0%': {
             opacity: 0.9
         },
-        '90%': {
-            opactiy: 0.9
-        },
         '100%': {
             opacity: 0
         }
@@ -71,7 +58,7 @@ var hideContentAnimation = animation.hideContentAnimation;
 var showBackdropAnimation = animation.showBackdropAnimation;
 var hideBackdropAnimation = animation.hideBackdropAnimation;
 
-module.exports = {
+module.exports = modalFactory({
     getRef: function(willHidden) {
         return 'content';
     },
@@ -95,7 +82,7 @@ module.exports = {
             zIndex: 1040,
             backgroundColor: "#373A47",
             animationFillMode: 'forwards',
-            animationDuration: '0.3s',
+            animationDuration: '0.4s',
             animationName: willHidden ? hideBackdropAnimation : showBackdropAnimation,
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         });
@@ -110,4 +97,4 @@ module.exports = {
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         })
     }
-}
+});

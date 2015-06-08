@@ -1,9 +1,12 @@
+var modalFactory = require('./modalFactory');
+
+var React = require('react');
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
 var animation = {
     show: {
-        animationDuration: '0.4s',
+        animationDuration: '0.8s',
         animationTimingFunction: 'cubic-bezier(0.6,0,0.4,1)'
     },
     hide: {
@@ -13,11 +16,12 @@ var animation = {
     showContentAnimation: insertKeyframesRule({
         '0%': {
             opacity: 0,
-            transform: 'scale3d(0, 0, 1)'
+        },
+        '40%':{
+            opacity: 0
         },
         '100%': {
             opacity: 1,
-            transform: 'scale3d(1, 1, 1)'
         }
     }),
 
@@ -27,7 +31,6 @@ var animation = {
         },
         '100%': {
             opacity: 0,
-            transform: 'scale3d(0.5, 0.5, 1)'
         }
     }),
 
@@ -57,9 +60,54 @@ var hideContentAnimation = animation.hideContentAnimation;
 var showBackdropAnimation = animation.showBackdropAnimation;
 var hideBackdropAnimation = animation.hideBackdropAnimation;
 
-module.exports = {
+module.exports = modalFactory({
     getRef: function(willHidden) {
         return 'content';
+    },
+    getSharp: function(willHidden) {
+        var strokeDashLength = 1680;
+
+        var showSharpAnimation = insertKeyframesRule({
+            '0%': {
+                'stroke-dashoffset': strokeDashLength
+            },
+            '100%': {
+                'stroke-dashoffset': 0
+            },
+        });
+
+
+        var sharpStyle = {
+            position: 'absolute',
+            width: 'calc(100%)',
+            height: 'calc(100%)',
+            zIndex: '-1'
+        };
+
+        var rectStyle = appendVendorPrefix({
+            animationDuration: willHidden? '0.4s' :'0.8s',
+            animationFillMode: 'forwards',
+            animationName: willHidden? hideContentAnimation: showSharpAnimation,
+            stroke: '#ffffff',
+            strokeWidth: '2px',
+            strokeDasharray: strokeDashLength
+        });
+
+        return React.createElement("div", {style: sharpStyle}, 
+            React.createElement("svg", {
+                xmlns: "http://www.w3.org/2000/svg", 
+                width: "100%", 
+                height: "100%", 
+                viewBox: "0 0 496 136", 
+                preserveAspectRatio: "none"}, 
+                React.createElement("rect", {style: rectStyle, 
+                    x: "2", 
+                    y: "2", 
+                    fill: "none", 
+                    width: "492", 
+                    height: "132"})
+            )
+        )
     },
     getModalStyle: function(willHidden) {
         return appendVendorPrefix({
@@ -96,4 +144,4 @@ module.exports = {
             animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
         })
     }
-}
+});

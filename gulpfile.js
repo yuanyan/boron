@@ -2,6 +2,7 @@ var browserify = require('browserify'),
 	shim = require('browserify-shim'),
 	chalk = require('chalk'),
 	del = require('del'),
+	vinyPaths = require('vinyl-paths'),
 	gulp = require('gulp'),
 	bump = require('gulp-bump'),
 	connect = require('gulp-connect'),
@@ -14,6 +15,7 @@ var browserify = require('browserify'),
 	gutil = require('gulp-util'),
 	merge = require('merge-stream'),
 	reactify = require('reactify'),
+	react = require('gulp-react'),
 	source = require('vinyl-source-stream'),
 	watchify = require('watchify');
 
@@ -45,6 +47,7 @@ var EXAMPLE_LESS = 'app.less';
 var EXAMPLE_FILES = [
 	'index.html'
 ];
+
 
 /**
  * Bundle helpers
