@@ -304,8 +304,12 @@ gulp.task('publish:npm', ['build:npm'], function(done) {
 		.on('close', done);
 });
 
+gulp.task('clean:npm', function () {
+	buildToRoot().pipe(vinyPaths(del))
+})
+
 gulp.task('release:npm', ['publish:npm'], function(){
-		buildToRoot().pipe(vinyPaths(del))
+	gulp.start('clean:npm')
 });
 
 
