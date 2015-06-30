@@ -28,7 +28,7 @@ npm install boron --save
 
 ## Usage
 
-```
+``` javascript
 var Modal = require('boron/DropModal');
 var Example = React.createClass({
     showModal: function(){
