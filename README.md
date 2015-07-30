@@ -41,11 +41,13 @@ var Example = React.createClass({
     },
     render: function() {
         return (
-            <button onClick={this.showModal}>Open</button>
-            <Modal ref="modal">
-                <h2>I'm a dialog</h2>
-                <button onClick={this.hideModal}>Close</button>
-            </Modal>
+            <div>
+                <button onClick={this.showModal}>Open</button>
+                <Modal ref="modal">
+                    <h2>I'm a dialog</h2>
+                    <button onClick={this.hideModal}>Close</button>
+                </Modal>
+            </div>
         );
     }
 });
