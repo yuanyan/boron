@@ -51,6 +51,8 @@ module.exports = function(animation){
 
             }.bind(this);
             transitionEvents.addEndEventListener(node, endListener);
+            
+            window.addEventListener("keydown", this.listenKeyboard, true);
         },
 
         render: function() {
@@ -134,10 +136,6 @@ module.exports = function(animation){
                      event.keyCode === 27)) {
                 this.hide();
             }
-        },
-
-        componentDidMount: function() {
-            window.addEventListener("keydown", this.listenKeyboard, true);
         },
 
         componentWillUnmount: function() {
