@@ -41,7 +41,7 @@ module.exports = function(animation){
 
         componentDidMount: function(){
             var ref = this.props.animation.getRef();
-            var node = this.refs[ref].getDOMNode();
+            var node = this.refs[ref];
             var endListener = function(e) {
                 if (e && e.target !== node) {
                     return;
@@ -68,7 +68,7 @@ module.exports = function(animation){
             var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
             if(willHidden) {
-                var node = this.refs[ref].getDOMNode();
+                var node = this.refs[ref];
                 var endListener = function(e) {
                     if (e && e.target !== node) {
                         return;
