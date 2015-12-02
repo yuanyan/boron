@@ -67,9 +67,9 @@ module.exports = function(animation){
             var sharp = animation.getSharp && animation.getSharp(willHidden);
             var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
-            if (this.props.style) {
-                for (var style in this.props.style) {
-                    modalStyle[style] = this.props.style[style];
+            if (this.props.customStyle) {
+                for (var style in this.props.customStyle) {
+                    modalStyle[style] = this.props.customStyle[style];
                 };
             }
 
