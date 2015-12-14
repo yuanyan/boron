@@ -1,5 +1,5 @@
 var React = require('react');
-var transitionEvents = require('react-kit/transitionEvents');
+var transitionEvents = require('domkit/transitionEvents');
 
 module.exports = function(animation){
 

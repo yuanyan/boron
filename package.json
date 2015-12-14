@@ -1,6 +1,6 @@
 {
   "name": "boron",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A collection of dialog animations with React.js",
   "main": "Boron.js",
   "author": "Yuanyan Cao",
@@ -10,7 +10,7 @@
     "url": "https://github.com/yuanyan/boron.git"
   },
   "dependencies": {
-    "react-kit": "^0.1.2"
+    "domkit": "^0.0.1"
   },
   "peerDependencies": {
     "react": ">=0.12.0"
