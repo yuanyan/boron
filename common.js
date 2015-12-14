@@ -19001,7 +19001,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":137,"_process":1}],"react":[function(require,module,exports){
+},{"./emptyFunction":137,"_process":1}],"react-dom":[function(require,module,exports){
+'use strict';
+
+module.exports = require('react/lib/ReactDOM');
+
+},{"react/lib/ReactDOM":36}],"react":[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');

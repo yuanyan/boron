@@ -1,5 +1,6 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var selfCleaningTimeout = {
     componentDidUpdate: function() {
@@ -45,19 +46,19 @@ var ComponentPreview = React.createClass({displayName: "ComponentPreview",
     },
 
     executeCode: function() {
-        var mountNode = this.refs.mount.getDOMNode();
+        var mountNode = this.refs.mount;
 
         try {
-            React.unmountComponentAtNode(mountNode);
+            ReactDOM.unmountComponentAtNode(mountNode);
         } catch (e) { }
 
         try {
             var compiledCode = this.compileCode();
-            React.render(eval(compiledCode), mountNode);
+            ReactDOM.render(eval(compiledCode), mountNode);
         } catch (err) {
 
             this.setTimeout(function() {
-                React.render(
+                ReactDOM.render(
                     React.createElement("div", {className: "playgroundError"},  err.stack || err.toString()),
                     mountNode
                 );
@@ -80,7 +81,7 @@ var CodeMirrorEditor = React.createClass({displayName: "CodeMirrorEditor",
     componentDidMount: function() {
         if (IS_MOBILE) return;
 
-        this.editor = CodeMirror.fromTextArea(this.refs.editor.getDOMNode(), {
+        this.editor = CodeMirror.fromTextArea(this.refs.editor, {
             mode: 'javascript',
             //lineNumbers: true,
             viewportMargin: Infinity,
@@ -176,11 +177,11 @@ var ReactPlayground = React.createClass({displayName: "ReactPlayground",
 for(var id=1; id<10; id++){
     var example = document.getElementById('example'+id);
     if(example){
-        React.render(
+        ReactDOM.render(
             React.createElement(ReactPlayground, {codeText: document.getElementById('code'+id).innerHTML}),
             example
         );
     }
 }
 
-},{"react":undefined}]},{},[1]);
+},{"react":undefined,"react-dom":undefined}]},{},[1]);
