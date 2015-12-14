@@ -43,7 +43,7 @@ module.exports = function(animation){
 
         componentDidMount: function(){
             var ref = this.props.animation.getRef();
-            var node = this.refs[ref].getDOMNode();
+            var node = this.refs[ref];
             var endListener = function(e) {
                 if (e && e.target !== node) {
                     return;
@@ -82,7 +82,7 @@ module.exports = function(animation){
             }
 
             if(willHidden) {
-                var node = this.refs[ref].getDOMNode();
+                var node = this.refs[ref];
                 var endListener = function(e) {
                     if (e && e.target !== node) {
                         return;
