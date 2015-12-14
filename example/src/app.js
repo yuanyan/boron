@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var selfCleaningTimeout = {
     componentDidUpdate: function() {
@@ -44,10 +45,10 @@ var ComponentPreview = React.createClass({
     },
 
     executeCode: function() {
-        var mountNode = this.refs.mount.getDOMNode();
+        var mountNode = this.refs.mount;
 
         try {
-            React.unmountComponentAtNode(mountNode);
+            ReactDOM.unmountComponentAtNode(mountNode);
         } catch (e) { }
 
         try {
@@ -175,7 +176,7 @@ var ReactPlayground = React.createClass({
 for(var id=1; id<10; id++){
     var example = document.getElementById('example'+id);
     if(example){
-        React.render(
+        ReactDOM.render(
             <ReactPlayground codeText={document.getElementById('code'+id).innerHTML} />,
             example
         );
