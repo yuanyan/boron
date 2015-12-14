@@ -53,11 +53,11 @@ var ComponentPreview = React.createClass({
 
         try {
             var compiledCode = this.compileCode();
-            React.render(eval(compiledCode), mountNode);
+            ReactDOM.render(eval(compiledCode), mountNode);
         } catch (err) {
 
             this.setTimeout(function() {
-                React.render(
+                ReactDOM.render(
                     <div className="playgroundError">{ err.stack || err.toString() }</div>,
                     mountNode
                 );
@@ -80,7 +80,7 @@ var CodeMirrorEditor = React.createClass({
     componentDidMount: function() {
         if (IS_MOBILE) return;
 
-        this.editor = CodeMirror.fromTextArea(this.refs.editor.getDOMNode(), {
+        this.editor = CodeMirror.fromTextArea(this.refs.editor, {
             mode: 'javascript',
             //lineNumbers: true,
             viewportMargin: Infinity,

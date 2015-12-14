@@ -41,20 +41,17 @@ module.exports = function(animation){
             return this.state.hidden;
         },
 
-        componentDidMount: function(){
-            var ref = this.props.animation.getRef();
-            var node = this.refs[ref];
-            var endListener = function(e) {
-                if (e && e.target !== node) {
-                    return;
-                }
-                transitionEvents.removeEndEventListener(node, endListener);
-                this.enter();
-
-            }.bind(this);
-            transitionEvents.addEndEventListener(node, endListener);
-            
-            window.addEventListener("keydown", this.listenKeyboard, true);
+        addTransitionListener: function(node, handle){
+            if(node) {
+              var endListener = function(e) {
+                  if (e && e.target !== node) {
+                      return;
+                  }
+                  transitionEvents.removeEndEventListener(node, endListener);
+                  handle();
+              };
+              transitionEvents.addEndEventListener(node, endListener);
+            }
         },
 
         render: function() {
@@ -69,13 +66,8 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
-            
-            var backdropModifiers = {
-                style: backdropStyle,
-                onClick: this.props.backdropEvent ? this.hide : null
-            };
 
-            var backdrop = this.props.backdrop? React.createElement("div", backdropModifiers): undefined;
+            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.backdropEvent? this.hide : null} />: undefined;
 
             if (this.props.customStyle) {
                 for (var style in this.props.customStyle) {
@@ -85,16 +77,7 @@ module.exports = function(animation){
 
             if(willHidden) {
                 var node = this.refs[ref];
-                var endListener = function(e) {
-                    if (e && e.target !== node) {
-                        return;
-                    }
-
-                    transitionEvents.removeEndEventListener(node, endListener);
-                    this.leave();
-
-                }.bind(this);
-                transitionEvents.addEndEventListener(node, endListener);
+                this.addTransitionListener(node, this.leave);
             }
 
             return (<span>
@@ -127,6 +110,12 @@ module.exports = function(animation){
                 willHidden: false,
                 hidden: false
             });
+
+            setTimeout(function(){
+              var ref = this.props.animation.getRef();
+              var node = this.refs[ref];
+              this.addTransitionListener(node, this.enter);
+            }.bind(this), 0);
         },
 
         hide: function(){
@@ -152,10 +141,13 @@ module.exports = function(animation){
             }
         },
 
-        componentWillUnmount: function() {
-            window.removeEventListener("keydown", this.listenKeyboard, true);
+        componentDidMount: function(){
+            window.addEventListener("keydown", this.listenKeyboard, true);
         },
 
+        componentWillUnmount: function() {
+            window.removeEventListener("keydown", this.listenKeyboard, true);
+        }
     });
 
 }

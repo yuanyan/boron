@@ -44,7 +44,7 @@ var Example = React.createClass({
             <div>
                 <button onClick={this.showModal}>Open</button>
                 <Modal ref="modal">
-                    <h2>I'm a dialog</h2>
+                    <h2>I am a dialog</h2>
                     <button onClick={this.hideModal}>Close</button>
                 </Modal>
             </div>
@@ -52,7 +52,6 @@ var Example = React.createClass({
     }
 });
 ```
-
 
 ## Modals
 
