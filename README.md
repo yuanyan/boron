@@ -5,6 +5,9 @@ Boron
 
 A collection of dialog animations with React.js.
 
+* React 0.14+ Use `boron 0.2`
+* React 0.12+ Use `boron 0.1`
+
 ## Demo & Examples
 
 Live demo: [yuanyan.github.io/boron](http://yuanyan.github.io/boron/)
@@ -52,6 +55,15 @@ var Example = React.createClass({
     }
 });
 ```
+
+## Props
+
+* className - Add custom class name.
+* keyboard - Close the modal when escape key is pressed.
+* backdrop - Includes a backdrop element.
+* closeOnClick - Close the backdrop element when clicked.
+* onShow - Show callback.
+* onHide - Hide callback.
 
 ## Modals
 
