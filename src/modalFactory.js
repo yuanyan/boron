@@ -67,6 +67,12 @@ module.exports = function(animation){
             var sharp = animation.getSharp && animation.getSharp(willHidden);
             var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
+            if (this.props.customStyle) {
+                for (var style in this.props.customStyle) {
+                    modalStyle[style] = this.props.customStyle[style];
+                };
+            }
+
             if(willHidden) {
                 var node = this.refs[ref].getDOMNode();
                 var endListener = function(e) {
