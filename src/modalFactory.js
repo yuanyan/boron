@@ -14,7 +14,8 @@ module.exports = function(animation){
             backdrop: React.PropTypes.oneOfType([
                 React.PropTypes.bool,
                 React.PropTypes.string
-            ])
+            ]),
+            backdropEvent: React.PropTypes.bool
         },
 
         getDefaultProps: function() {
@@ -24,7 +25,8 @@ module.exports = function(animation){
                 onHide: function(){},
                 animation: animation,
                 keyboard: true,
-                backdrop: true
+                backdrop: true,
+                backdropEvent: true
             };
         },
 
@@ -65,7 +67,13 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
-            var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
+            
+            var backdropModifiers = {
+                style: backdropStyle,
+                onClick: this.props.backdropEvent ? this.hide : null
+            };
+
+            var backdrop = this.props.backdrop? React.createElement("div", backdropModifiers): undefined;
 
             if (this.props.customStyle) {
                 for (var style in this.props.customStyle) {
