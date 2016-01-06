@@ -1,5 +1,6 @@
 var React = require('react');
 var transitionEvents = require('domkit/transitionEvents');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 module.exports = function(animation){
 
@@ -78,21 +79,24 @@ module.exports = function(animation){
 
             // Apply custom style properties
             if (this.props.modalStyle) {
-                for (var style in this.props.modalStyle) {
-                    modalStyle[style] = this.props.modalStyle[style];
-                };
+                var prefixedModalStyle = appendVendorPrefix(this.props.modalStyle);
+                for (var style in prefixedModalStyle) {
+                    modalStyle[style] = prefixedModalStyle[style];
+                }
             }
 
             if (this.props.backdropStyle) {
-                for (var style in this.props.backdropStyle) {
-                    backdropStyle[style] = this.props.backdropStyle[style];
-                };
+              var prefixedBackdropStyle = appendVendorPrefix(this.props.backdropStyle);
+                for (var style in prefixedBackdropStyle) {
+                    backdropStyle[style] = prefixedBackdropStyle[style];
+                }
             }
 
             if (this.props.contentStyle) {
-                for (var style in this.props.contentStyle) {
-                    contentStyle[style] = this.props.contentStyle[style];
-                };
+              var prefixedContentStyle = appendVendorPrefix(this.props.contentStyle);
+                for (var style in prefixedContentStyle) {
+                    contentStyle[style] = prefixedContentStyle[style];
+                }
             }
 
             var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;

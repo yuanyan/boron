@@ -64,16 +64,19 @@ var Example = React.createClass({
 * closeOnClick - Close the backdrop element when clicked.
 * onShow - Show callback.
 * onHide - Hide callback.
-* modalStyle - Object of CSS styles passed to the modal
-* backdropStyle - Object of CSS styles passed to the backdrop
-* contentStyle - Object of CSS styles passed to the backdrop
+* modalStyle - CSS styles to apply to the modal
+* backdropStyle - CSS styles to apply to the backdrop
+* contentStyle - CSS styles to apply to the modal's content
 
 # Custom Styles
-Styles can be passed to override default values.
+Objects consisting of CSS properties/values can be passed as props to the Modal component.
+The values for the CSS properties will either add new properties or override the default property value set for that Modal type.
 
-Custom modal width:
+Modal with 80% width:
 ``` javascript
 var Modal = require('boron/ScaleModal');
+
+// Style object
 var modalStyle = {
     width: '80%'
 };
@@ -102,6 +105,8 @@ var Example = React.createClass({
 Red backdrop with a blue modal, rotated at 45 degrees:
 ``` javascript
 var Modal = require('boron/FlyModal');
+
+// Individual styles for the modal, modal content, and backdrop
 var modalStyle = {
     transform: 'rotate(45deg) translateX(-50%)',
 };
