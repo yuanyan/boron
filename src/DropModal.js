@@ -122,6 +122,7 @@ module.exports = modalFactory({
     getContentStyle: function(willHidden) {
         return appendVendorPrefix({
             margin: 0,
+            opacity: 0,
             animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
             animationFillMode: 'forwards',
             animationDelay: '0.25s',
