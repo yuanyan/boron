@@ -13,6 +13,9 @@ module.exports = function(animation){
             animation: React.PropTypes.object,
             backdrop: React.PropTypes.bool,
             closeOnClick: React.PropTypes.bool,
+            modalStyle: React.PropTypes.object,
+            backdropStyle: React.PropTypes.object,
+            contentStyle: React.PropTypes.object,
         },
 
         getDefaultProps: function() {
@@ -23,7 +26,10 @@ module.exports = function(animation){
                 animation: animation,
                 keyboard: true,
                 backdrop: true,
-                closeOnClick: true
+                closeOnClick: true,
+                modalStyle: {},
+                backdropStyle: {},
+                contentStyle: {},
             };
         },
 
@@ -70,13 +76,26 @@ module.exports = function(animation){
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
 
-            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
-
-            if (this.props.customStyle) {
-                for (var style in this.props.customStyle) {
-                    modalStyle[style] = this.props.customStyle[style];
+            // Apply custom style properties
+            if (this.props.modalStyle) {
+                for (var style in this.props.modalStyle) {
+                    modalStyle[style] = this.props.modalStyle[style];
                 };
             }
+
+            if (this.props.backdropStyle) {
+                for (var style in this.props.backdropStyle) {
+                    backdropStyle[style] = this.props.backdropStyle[style];
+                };
+            }
+
+            if (this.props.contentStyle) {
+                for (var style in this.props.contentStyle) {
+                    contentStyle[style] = this.props.contentStyle[style];
+                };
+            }
+
+            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
 
             if(willHidden) {
                 var node = this.refs[ref];

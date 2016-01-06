@@ -64,6 +64,78 @@ var Example = React.createClass({
 * closeOnClick - Close the backdrop element when clicked.
 * onShow - Show callback.
 * onHide - Hide callback.
+* modalStyle - Object of CSS styles passed to the modal
+* backdropStyle - Object of CSS styles passed to the backdrop
+* contentStyle - Object of CSS styles passed to the backdrop
+
+# Custom Styles
+Styles can be passed to override default values.
+
+Custom modal width:
+``` javascript
+var Modal = require('boron/ScaleModal');
+var modalStyle = {
+    width: '80%'
+};
+
+var Example = React.createClass({
+    showModal: function(){
+        this.refs.modal.show();
+    },
+    hideModal: function(){
+        this.refs.modal.hide();
+    },
+    render: function() {
+        return (
+            <div>
+                <button onClick={this.showModal}>Open</button>
+                <Modal ref="modal" modalStyle={modalStyle}>
+                    <h2>I am a dialog</h2>
+                    <button onClick={this.hideModal}>Close</button>
+                </Modal>
+            </div>
+        );
+    }
+});
+```
+
+Red backdrop with a blue modal, rotated at 45 degrees:
+``` javascript
+var Modal = require('boron/FlyModal');
+var modalStyle = {
+    transform: 'rotate(45deg) translateX(-50%)',
+};
+
+var backdropStyle = {
+    backgroundColor: 'red'
+};
+
+var contentStyle = {
+    backgroundColor: 'blue',
+    height: '100%'
+};
+
+var Example = React.createClass({
+    showModal: function(){
+        this.refs.modal.show();
+    },
+    hideModal: function(){
+        this.refs.modal.hide();
+    },
+    render: function() {
+        return (
+            <div>
+                <button onClick={this.showModal}>Open</button>
+                <Modal ref="modal" modalStyle={modalStyle} backdropStyle={backdropStyle} contentStyle={contentStyle}>
+                    <h2>I am a dialog</h2>
+                    <button onClick={this.hideModal}>Close</button>
+                </Modal>
+            </div>
+        );
+    }
+});
+```
+
 
 ## Modals
 
