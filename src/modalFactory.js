@@ -46,7 +46,7 @@ module.exports = function(animation){
         },
 
         addTransitionListener: function(node, handle){
-            if(node) {
+            if (node) {
               var endListener = function(e) {
                   if (e && e.target !== node) {
                       return;
@@ -59,7 +59,7 @@ module.exports = function(animation){
         },
 
         handleBackdropClick: function() {
-            if(this.props.closeOnClick) {
+            if (this.props.closeOnClick) {
                 this.hide();
             }
         },
@@ -67,7 +67,7 @@ module.exports = function(animation){
         render: function() {
 
             var hidden = this.hasHidden();
-            if(hidden) return null;
+            if (hidden) return null;
 
             var willHidden = this.state.willHidden;
             var animation = this.props.animation;
@@ -130,7 +130,7 @@ module.exports = function(animation){
         },
 
         show: function(){
-            if(!this.hasHidden()) return;
+            if (!this.hasHidden()) return;
 
             this.setState({
                 willHidden: false,
@@ -145,7 +145,7 @@ module.exports = function(animation){
         },
 
         hide: function(){
-            if(this.hasHidden()) return;
+            if (this.hasHidden()) return;
 
             this.setState({
                 willHidden: true
@@ -153,7 +153,7 @@ module.exports = function(animation){
         },
 
         toggle: function(){
-            if(this.hasHidden())
+            if (this.hasHidden())
                 this.show();
             else
                 this.hide();
@@ -175,5 +175,4 @@ module.exports = function(animation){
             window.removeEventListener("keydown", this.listenKeyboard, true);
         }
     });
-
 }

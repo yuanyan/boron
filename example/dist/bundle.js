@@ -364,6 +364,7 @@ module.exports = modalFactory({
     getContentStyle: function(willHidden) {
         return appendVendorPrefix({
             margin: 0,
+            opacity: 0,
             animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
             animationFillMode: 'forwards',
             animationDelay: '0.25s',
@@ -388,7 +389,6 @@ var animation = {
         animationTimingFunction: 'ease-out'
     },
     showContentAnimation: insertKeyframesRule({
-
         '0%': {
             opacity: 0
         },
@@ -1086,6 +1086,7 @@ module.exports = modalFactory({
 },{"./modalFactory":14,"domkit/appendVendorPrefix":1,"domkit/insertKeyframesRule":5}],14:[function(require,module,exports){
 var React = require('react');
 var transitionEvents = require('domkit/transitionEvents');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 module.exports = function(animation){
 
@@ -1097,11 +1098,11 @@ module.exports = function(animation){
             onShow: React.PropTypes.func,
             onHide: React.PropTypes.func,
             animation: React.PropTypes.object,
-            backdrop: React.PropTypes.oneOfType([
-                React.PropTypes.bool,
-                React.PropTypes.string
-            ]),
-            backdropEvent: React.PropTypes.bool
+            backdrop: React.PropTypes.bool,
+            closeOnClick: React.PropTypes.bool,
+            modalStyle: React.PropTypes.object,
+            backdropStyle: React.PropTypes.object,
+            contentStyle: React.PropTypes.object,
         },
 
         getDefaultProps: function() {
@@ -1112,7 +1113,10 @@ module.exports = function(animation){
                 animation: animation,
                 keyboard: true,
                 backdrop: true,
-                backdropEvent: true
+                closeOnClick: true,
+                modalStyle: {},
+                backdropStyle: {},
+                contentStyle: {},
             };
         },
 
@@ -1128,7 +1132,7 @@ module.exports = function(animation){
         },
 
         addTransitionListener: function(node, handle){
-            if(node) {
+            if (node) {
               var endListener = function(e) {
                   if (e && e.target !== node) {
                       return;
@@ -1140,10 +1144,16 @@ module.exports = function(animation){
             }
         },
 
+        handleBackdropClick: function() {
+            if (this.props.closeOnClick) {
+                this.hide();
+            }
+        },
+
         render: function() {
 
             var hidden = this.hasHidden();
-            if(hidden) return null;
+            if (hidden) return null;
 
             var willHidden = this.state.willHidden;
             var animation = this.props.animation;
@@ -1153,13 +1163,29 @@ module.exports = function(animation){
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
 
-            var backdrop = this.props.backdrop? React.createElement("div", {style: backdropStyle, onClick: this.props.backdropEvent? this.hide : null}): undefined;
-
-            if (this.props.customStyle) {
-                for (var style in this.props.customStyle) {
-                    modalStyle[style] = this.props.customStyle[style];
-                };
+            // Apply custom style properties
+            if (this.props.modalStyle) {
+                var prefixedModalStyle = appendVendorPrefix(this.props.modalStyle);
+                for (var style in prefixedModalStyle) {
+                    modalStyle[style] = prefixedModalStyle[style];
+                }
             }
+
+            if (this.props.backdropStyle) {
+              var prefixedBackdropStyle = appendVendorPrefix(this.props.backdropStyle);
+                for (var style in prefixedBackdropStyle) {
+                    backdropStyle[style] = prefixedBackdropStyle[style];
+                }
+            }
+
+            if (this.props.contentStyle) {
+              var prefixedContentStyle = appendVendorPrefix(this.props.contentStyle);
+                for (var style in prefixedContentStyle) {
+                    contentStyle[style] = prefixedContentStyle[style];
+                }
+            }
+
+            var backdrop = this.props.backdrop? React.createElement("div", {style: backdropStyle, onClick: this.props.closeOnClick? this.handleBackdropClick: null}): undefined;
 
             if(willHidden) {
                 var node = this.refs[ref];
@@ -1190,7 +1216,7 @@ module.exports = function(animation){
         },
 
         show: function(){
-            if(!this.hasHidden()) return;
+            if (!this.hasHidden()) return;
 
             this.setState({
                 willHidden: false,
@@ -1205,7 +1231,7 @@ module.exports = function(animation){
         },
 
         hide: function(){
-            if(this.hasHidden()) return;
+            if (this.hasHidden()) return;
 
             this.setState({
                 willHidden: true
@@ -1213,7 +1239,7 @@ module.exports = function(animation){
         },
 
         toggle: function(){
-            if(this.hasHidden())
+            if (this.hasHidden())
                 this.show();
             else
                 this.hide();
@@ -1235,10 +1261,9 @@ module.exports = function(animation){
             window.removeEventListener("keydown", this.listenKeyboard, true);
         }
     });
-
 }
 
-},{"domkit/transitionEvents":7,"react":undefined}],"boron":[function(require,module,exports){
+},{"domkit/appendVendorPrefix":1,"domkit/transitionEvents":7,"react":undefined}],"boron":[function(require,module,exports){
 module.exports = {
     DropModal: require('./DropModal'),
     WaveModal: require('./WaveModal'),
