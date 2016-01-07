@@ -1,5 +1,6 @@
 var React = require('react');
 var transitionEvents = require('domkit/transitionEvents');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 module.exports = function(animation){
 
@@ -13,6 +14,9 @@ module.exports = function(animation){
             animation: React.PropTypes.object,
             backdrop: React.PropTypes.bool,
             closeOnClick: React.PropTypes.bool,
+            modalStyle: React.PropTypes.object,
+            backdropStyle: React.PropTypes.object,
+            contentStyle: React.PropTypes.object,
         },
 
         getDefaultProps: function() {
@@ -23,7 +27,10 @@ module.exports = function(animation){
                 animation: animation,
                 keyboard: true,
                 backdrop: true,
-                closeOnClick: true
+                closeOnClick: true,
+                modalStyle: {},
+                backdropStyle: {},
+                contentStyle: {},
             };
         },
 
@@ -70,13 +77,29 @@ module.exports = function(animation){
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
 
-            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
-
-            if (this.props.customStyle) {
-                for (var style in this.props.customStyle) {
-                    modalStyle[style] = this.props.customStyle[style];
-                };
+            // Apply custom style properties
+            if (this.props.modalStyle) {
+                var prefixedModalStyle = appendVendorPrefix(this.props.modalStyle);
+                for (var style in prefixedModalStyle) {
+                    modalStyle[style] = prefixedModalStyle[style];
+                }
             }
+
+            if (this.props.backdropStyle) {
+              var prefixedBackdropStyle = appendVendorPrefix(this.props.backdropStyle);
+                for (var style in prefixedBackdropStyle) {
+                    backdropStyle[style] = prefixedBackdropStyle[style];
+                }
+            }
+
+            if (this.props.contentStyle) {
+              var prefixedContentStyle = appendVendorPrefix(this.props.contentStyle);
+                for (var style in prefixedContentStyle) {
+                    contentStyle[style] = prefixedContentStyle[style];
+                }
+            }
+
+            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
 
             if(willHidden) {
                 var node = this.refs[ref];
