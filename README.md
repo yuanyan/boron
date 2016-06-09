@@ -63,10 +63,20 @@ var Example = React.createClass({
 * backdrop - Includes a backdrop element.
 * closeOnClick - Close the backdrop element when clicked.
 * onShow - Show callback.
-* onHide - Hide callback.
+* onHide - Hide callback. Argument is the source of the hide action, one of:
+ * hide - hide() method is the cause of the hide.
+ * toggle - toggle() method is the cause of the hide
+ * keyboard - keyboard (escape key) is the cause of the hide
+ * backdrop - backdrop click is the cause of the hide
+ * [any] - custom argument passed by invoking code into the hide() method when called directly.
 * modalStyle - CSS styles to apply to the modal
 * backdropStyle - CSS styles to apply to the backdrop
 * contentStyle - CSS styles to apply to the modal's content
+
+Note: If the hide() method is called directly, a custom source string can be
+passed as the argument, as noted above. For example, this might be useful if
+if multiple actions could cause the hide and it was desirable to know which of those
+actions was the trigger for the given onHide callback).
 
 # Custom Styles
 Objects consisting of CSS properties/values can be passed as props to the Modal component.
