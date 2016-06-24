@@ -160,6 +160,12 @@ module.exports = function(animation){
         },
 
         listenKeyboard: function(event) {
+            (typeof(this.props.keyboard)=="function")
+                ?this.props.keyboard(event)
+                :this.closeOnEsc(event);
+        },
+
+        closeOnEsc: function(event){
             if (this.props.keyboard &&
                     (event.key === "Escape" ||
                      event.keyCode === 27)) {
