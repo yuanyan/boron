@@ -42,11 +42,16 @@ var Example = React.createClass({
     hideModal: function(){
         this.refs.modal.hide();
     },
+
+    callback: function(event){
+        console.log(event);
+    },
+
     render: function() {
         return (
             <div>
                 <button onClick={this.showModal}>Open</button>
-                <Modal ref="modal">
+                <Modal ref="modal" keyboard={this.callback}>
                     <h2>I am a dialog</h2>
                     <button onClick={this.hideModal}>Close</button>
                 </Modal>
@@ -59,7 +64,7 @@ var Example = React.createClass({
 ## Props
 
 * className - Add custom class name.
-* keyboard - Close the modal when escape key is pressed.
+* keyboard - Receive a callback function or a boolean to choose to close the modal when escape key is pressed.
 * backdrop - Includes a backdrop element.
 * closeOnClick - Close the backdrop element when clicked.
 * onShow - Show callback.
