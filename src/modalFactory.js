@@ -38,7 +38,7 @@ module.exports = function(animation){
             return {
                 willHidden: false,
                 hidden: true
-            }
+            };
         },
 
         hasHidden: function(){
@@ -60,7 +60,7 @@ module.exports = function(animation){
 
         handleBackdropClick: function() {
             if (this.props.closeOnClick) {
-                this.hide();
+                this.hide("backdrop");
             }
         },
 
@@ -122,7 +122,7 @@ module.exports = function(animation){
             this.setState({
                 hidden: true
             });
-            this.props.onHide();
+            this.props.onHide(this.state.hideSource);
         },
 
         enter: function(){
@@ -144,10 +144,15 @@ module.exports = function(animation){
             }.bind(this), 0);
         },
 
-        hide: function(){
+        hide: function(source){
             if (this.hasHidden()) return;
 
+            if (!source) {
+                source = "hide";
+            }
+
             this.setState({
+                hideSource: source,
                 willHidden: true
             });
         },
@@ -156,7 +161,7 @@ module.exports = function(animation){
             if (this.hasHidden())
                 this.show();
             else
-                this.hide();
+                this.hide("toggle");
         },
 
         listenKeyboard: function(event) {
@@ -169,7 +174,7 @@ module.exports = function(animation){
             if (this.props.keyboard &&
                     (event.key === "Escape" ||
                      event.keyCode === 27)) {
-                this.hide();
+                this.hide("keyboard");
             }
         },
 
@@ -181,4 +186,4 @@ module.exports = function(animation){
             window.removeEventListener("keydown", this.listenKeyboard, true);
         }
     });
-}
+};
