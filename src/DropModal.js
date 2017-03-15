@@ -16,22 +16,22 @@ var animation = {
     showModalAnimation: insertKeyframesRule({
         '0%': {
             opacity: 0,
-            transform: 'translate3d(-50%, -300px, 0)'
+            transform: 'translate(-50%, -300px)'
         },
         '100%': {
             opacity: 1,
-            transform: 'translate3d(-50%, -50%, 0)'
+            transform: 'translate(-50%, -50%)'
         }
     }),
 
     hideModalAnimation: insertKeyframesRule({
         '0%': {
             opacity: 1,
-            transform: 'translate3d(-50%, -50%, 0)'
+            transform: 'translate(-50%, -50%)'
         },
         '100%': {
             opacity: 0,
-            transform: 'translate3d(-50%, 100px, 0)'
+            transform: 'translate(-50%, 100px)'
         }
     }),
 
@@ -56,22 +56,22 @@ var animation = {
     showContentAnimation: insertKeyframesRule({
         '0%': {
             opacity: 0,
-            transform: 'translate3d(0, -20px, 0)'
+            transform: 'translate(0, -20px)'
         },
         '100%': {
             opacity: 1,
-            transform: 'translate3d(0, 0, 0)'
+            transform: 'translate(0, 0)'
         }
     }),
 
     hideContentAnimation: insertKeyframesRule({
         '0%': {
             opacity: 1,
-            transform: 'translate3d(0, 0, 0)'
+            transform: 'translate(0, 0)'
         },
         '100%': {
             opacity: 0,
-            transform: 'translate3d(0, 50px, 0)'
+            transform: 'translate(0, 50px)'
         }
     })
 };
@@ -93,7 +93,7 @@ module.exports = modalFactory({
         return appendVendorPrefix({
             position: "fixed",
             width: "500px",
-            transform: "translate3d(-50%, -50%, 0)",
+            transform: "translate(-50%, -50%)",
             top: "50%",
             left: "50%",
             backgroundColor: "white",
